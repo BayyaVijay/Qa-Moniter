@@ -27,7 +27,7 @@ import {
   RadialBar,
 } from 'recharts';
 import {
-  TestTube2,
+  FlaskConical,
   TrendingUp,
   Users,
   Target,
@@ -46,6 +46,7 @@ import {
   Sparkles,
   Eye,
   BarChart3,
+  Play,
 } from 'lucide-react';
 
 export default function DashboardPage() {
@@ -137,13 +138,6 @@ export default function DashboardPage() {
     { month: 'Jun', passRate: stats.averagePassRate, coverage: 97, bugs: 5 },
   ];
 
-  const teamPerformanceData = [
-    { name: 'Alice', tests: 45, passRate: 96, efficiency: 92 },
-    { name: 'Bob', tests: 38, passRate: 94, efficiency: 88 },
-    { name: 'Carol', tests: 52, passRate: 98, efficiency: 95 },
-    { name: 'David', tests: 41, passRate: 91, efficiency: 85 },
-  ];
-
   const recentExecutions = testExecutions
     .sort((a, b) => new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime())
     .slice(0, 6);
@@ -193,7 +187,7 @@ export default function DashboardPage() {
                 </h1>
               </div>
               <p className="text-xl text-purple-100">
-                Your testing command center is operating at peak performance
+                Your unit testing command center is operating at peak performance
               </p>
               <div className="flex items-center space-x-6 mt-6">
                 <div className="flex items-center space-x-2 bg-white/10 px-4 py-2 rounded-xl backdrop-blur-sm">
@@ -234,9 +228,9 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card className="metric-card-advanced">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-600">Total Test Executions</CardTitle>
+            <CardTitle className="text-sm font-semibold text-gray-600">Total UT Executions</CardTitle>
             <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-3 rounded-2xl">
-              <TestTube2 className="h-5 w-5 text-white" />
+              <Play className="h-5 w-5 text-white" />
             </div>
           </CardHeader>
           <CardContent>
@@ -268,6 +262,34 @@ export default function DashboardPage() {
 
         <Card className="metric-card-advanced">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+            <CardTitle className="text-sm font-semibold text-gray-600">Unit Test Cases</CardTitle>
+            <div className="bg-gradient-to-r from-orange-500 to-red-600 p-3 rounded-2xl">
+              <FlaskConical className="h-5 w-5 text-white" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-4xl font-bold text-gray-900 mb-2">{stats.totalTasks}</div>
+            <div className="flex items-center space-x-2">
+              <ArrowUpRight className="h-4 w-4 text-green-600" />
+              <span className="text-sm text-green-600 font-semibold">+5 new cases</span>
+            </div>
+            <div className="flex -space-x-2 mt-3">
+              {[...Array(Math.min(stats.totalTasks, 4))].map((_, i) => (
+                <div key={i} className="w-8 h-8 bg-gradient-to-r from-orange-400 to-red-400 rounded-full border-2 border-white flex items-center justify-center text-white text-xs font-bold">
+                  {String.fromCharCode(65 + i)}
+                </div>
+              ))}
+              {stats.totalTasks > 4 && (
+                <div className="w-8 h-8 bg-gray-300 rounded-full border-2 border-white flex items-center justify-center text-gray-600 text-xs font-bold">
+                  +{stats.totalTasks - 4}
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="metric-card-advanced">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
             <CardTitle className="text-sm font-semibold text-gray-600">Active Team Members</CardTitle>
             <div className="bg-gradient-to-r from-purple-500 to-pink-600 p-3 rounded-2xl">
               <Users className="h-5 w-5 text-white" />
@@ -291,26 +313,6 @@ export default function DashboardPage() {
                 </div>
               )}
             </div>
-          </CardContent>
-        </Card>
-
-        <Card className="metric-card-advanced">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-600">AI Insights</CardTitle>
-            <div className="bg-gradient-to-r from-orange-500 to-red-600 p-3 rounded-2xl">
-              <Brain className="h-5 w-5 text-white" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-4xl font-bold text-gray-900 mb-2">{stats.aiInsights}</div>
-            <div className="flex items-center space-x-2">
-              <Zap className="h-4 w-4 text-orange-600" />
-              <span className="text-sm text-orange-600 font-semibold">Ready for review</span>
-            </div>
-            <Button size="sm" className="mt-3 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700">
-              <Eye className="h-3 w-3 mr-1" />
-              View Insights
-            </Button>
           </CardContent>
         </Card>
       </div>
@@ -376,7 +378,7 @@ export default function DashboardPage() {
           <CardHeader>
             <CardTitle className="flex items-center space-x-3">
               <BarChart3 className="h-6 w-6 text-purple-600" />
-              <span>Test Status Overview</span>
+              <span>UT Status Overview</span>
               <Badge className="bg-purple-100 text-purple-700">Live</Badge>
             </CardTitle>
           </CardHeader>
@@ -384,9 +386,9 @@ export default function DashboardPage() {
             {statusData.length === 0 ? (
               <div className="h-[320px] flex items-center justify-center text-gray-500">
                 <div className="text-center space-y-4">
-                  <TestTube2 className="h-16 w-16 text-gray-300 mx-auto" />
-                  <p className="text-lg font-medium">No test data available</p>
-                  <p className="text-sm">Start running tests to see analytics</p>
+                  <Play className="h-16 w-16 text-gray-300 mx-auto" />
+                  <p className="text-lg font-medium">No execution data available</p>
+                  <p className="text-sm">Start running unit tests to see analytics</p>
                 </div>
               </div>
             ) : (
@@ -423,67 +425,15 @@ export default function DashboardPage() {
         </Card>
       </div>
 
-      {/* Quality Trends */}
-      <Card className="chart-container">
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-3">
-            <TrendingUp className="h-6 w-6 text-green-600" />
-            <span>Quality Intelligence Dashboard</span>
-            <Badge className="bg-green-100 text-green-700">AI-Powered</Badge>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ResponsiveContainer width="100%" height={350}>
-            <LineChart data={qualityTrendData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-              <XAxis dataKey="month" stroke="#6B7280" fontSize={12} />
-              <YAxis stroke="#6B7280" fontSize={12} />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: 'white', 
-                  border: '2px solid #E5E7EB',
-                  borderRadius: '12px',
-                  boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)'
-                }} 
-              />
-              <Line 
-                type="monotone" 
-                dataKey="passRate" 
-                stroke="#10B981" 
-                strokeWidth={4}
-                dot={{ fill: '#10B981', strokeWidth: 3, r: 6 }}
-                name="Pass Rate (%)"
-              />
-              <Line 
-                type="monotone" 
-                dataKey="coverage" 
-                stroke="#3B82F6" 
-                strokeWidth={4}
-                dot={{ fill: '#3B82F6', strokeWidth: 3, r: 6 }}
-                name="Coverage (%)"
-              />
-              <Line 
-                type="monotone" 
-                dataKey="bugs" 
-                stroke="#EF4444" 
-                strokeWidth={4}
-                dot={{ fill: '#EF4444', strokeWidth: 3, r: 6 }}
-                name="Bug Count"
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card>
-
-      {/* Recent Activity & Team Performance */}
+      {/* Recent Activity & Mission Control */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Recent Test Executions */}
+        {/* Recent UT Executions */}
         <Card className="lg:col-span-2 neo-card">
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <Clock className="h-6 w-6 text-blue-600" />
-                <span>Recent Test Executions</span>
+                <span>Recent UT Executions</span>
                 <Badge className="bg-blue-100 text-blue-700">Live Feed</Badge>
               </div>
               <Button variant="outline" size="sm" className="hover:scale-105 transition-transform">
@@ -495,8 +445,8 @@ export default function DashboardPage() {
             <div className="space-y-4">
               {recentExecutions.length === 0 ? (
                 <div className="text-center py-12 text-gray-500">
-                  <TestTube2 className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                  <p className="text-lg font-medium">No recent test executions</p>
+                  <Play className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                  <p className="text-lg font-medium">No recent UT executions</p>
                   <p className="text-sm">Start testing to see activity here</p>
                 </div>
               ) : (
@@ -538,12 +488,12 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <Button className="w-full justify-start h-14 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-              <TestTube2 className="h-5 w-5 mr-3" />
-              Launch Test Execution
+              <Play className="h-5 w-5 mr-3" />
+              Launch UT Execution
             </Button>
             <Button variant="outline" className="w-full justify-start h-14 border-2 hover:border-green-300 rounded-2xl hover:scale-105 transition-all duration-300">
-              <Target className="h-5 w-5 mr-3 text-green-600" />
-              Create Smart Task
+              <FlaskConical className="h-5 w-5 mr-3 text-green-600" />
+              Create Unit Test
             </Button>
             <Button variant="outline" className="w-full justify-start h-14 border-2 hover:border-orange-300 rounded-2xl hover:scale-105 transition-all duration-300">
               <Brain className="h-5 w-5 mr-3 text-orange-600" />
@@ -561,7 +511,7 @@ export default function DashboardPage() {
                 <span className="font-semibold text-purple-800">Latest AI Insight</span>
               </div>
               <p className="text-sm text-purple-700">
-                Performance optimization detected: Consider parallel test execution to reduce runtime by 23%
+                Performance optimization detected: Consider parallel unit test execution to reduce runtime by 23%
               </p>
               <Button size="sm" className="mt-3 bg-purple-600 hover:bg-purple-700 text-white">
                 View Details
@@ -570,11 +520,6 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </div>
-
-      {/* Floating Action Button */}
-      <Button className="floating-action">
-        <Plus className="h-6 w-6" />
-      </Button>
     </div>
   );
 }

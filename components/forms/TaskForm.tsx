@@ -8,10 +8,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Trash2, Plus, Upload, X, FileText, Tag, TestTube } from 'lucide-react';
+import { Trash2, Plus, X, FlaskConical, Tag, TestTube } from 'lucide-react';
 import { Task } from '@/types/task';
 import MultiSelectTags from '@/components/MultiSelectTags';
-import ImageUpload from '@/components/ImageUpload';
 
 interface TaskFormProps {
   editTask?: Task | null;
@@ -19,14 +18,12 @@ interface TaskFormProps {
 }
 
 export default function TaskForm({ editTask, onSuccess }: TaskFormProps) {
-  const { createTask, updateTask, loading, uploadImages } = useTask();
+  const { createTask, updateTask, loading } = useTask();
   
   const [formData, setFormData] = useState({
     tags: [] as string[],
     description: '',
     testCases: [''],
-    notes: '',
-    attachedImages: [] as string[],
   });
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -37,8 +34,6 @@ export default function TaskForm({ editTask, onSuccess }: TaskFormProps) {
         tags: editTask.tags || [],
         description: editTask.description || '',
         testCases: editTask.testCases.length > 0 ? editTask.testCases : [''],
-        notes: editTask.notes || '',
-        attachedImages: editTask.attachedImages || [],
       });
     }
   }, [editTask]);
@@ -107,13 +102,6 @@ export default function TaskForm({ editTask, onSuccess }: TaskFormProps) {
     }
   };
 
-  const handleImagesChange = (images: string[]) => {
-    setFormData(prev => ({
-      ...prev,
-      attachedImages: images,
-    }));
-  };
-
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
 
@@ -158,14 +146,12 @@ export default function TaskForm({ editTask, onSuccess }: TaskFormProps) {
           tags: [],
           description: '',
           testCases: [''],
-          notes: '',
-          attachedImages: [],
         });
       }
 
       onSuccess?.();
     } catch (error) {
-      console.error('Error saving task:', error);
+      console.error('Error saving unit test case:', error);
     }
   };
 
@@ -186,7 +172,7 @@ export default function TaskForm({ editTask, onSuccess }: TaskFormProps) {
               error={errors.tags}
             />
             <p className="text-sm text-gray-600 mt-2">
-              Categorize your test to help with organization and filtering
+              Categorize your unit test to help with organization and filtering
             </p>
           </CardContent>
         </Card>
@@ -195,14 +181,14 @@ export default function TaskForm({ editTask, onSuccess }: TaskFormProps) {
         <Card className="border-l-4 border-l-green-500">
           <CardContent className="p-6">
             <div className="flex items-center space-x-2 mb-4">
-              <FileText className="h-5 w-5 text-green-600" />
-              <Label className="text-lg font-semibold">Test Description</Label>
+              <FlaskConical className="h-5 w-5 text-green-600" />
+              <Label className="text-lg font-semibold">Unit Test Description</Label>
             </div>
             <Textarea
               name="description"
               value={formData.description}
               onChange={handleInputChange}
-              placeholder="Describe what this test should validate, including expected behavior and acceptance criteria..."
+              placeholder="Describe what this unit test should validate, including expected behavior and acceptance criteria..."
               rows={4}
               className={`${errors.description ? 'border-red-500' : ''} resize-none`}
             />
@@ -282,56 +268,10 @@ export default function TaskForm({ editTask, onSuccess }: TaskFormProps) {
           </CardContent>
         </Card>
 
-        {/* Notes Section */}
-        <Card className="border-l-4 border-l-yellow-500">
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-2 mb-4">
-              <FileText className="h-5 w-5 text-yellow-600" />
-              <Label className="text-lg font-semibold">Additional Notes</Label>
-              <Badge variant="secondary" className="text-xs">Optional</Badge>
-            </div>
-            <Textarea
-              name="notes"
-              value={formData.notes}
-              onChange={handleInputChange}
-              placeholder="Add any additional context, prerequisites, or special instructions for testers..."
-              rows={3}
-              className="resize-none"
-            />
-            <p className="text-sm text-gray-600 mt-2">
-              Include any special instructions, dependencies, or context
-            </p>
-          </CardContent>
-        </Card>
-
-        {/* Images Section */}
-        <Card className="border-l-4 border-l-indigo-500">
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-2 mb-4">
-              <Upload className="h-5 w-5 text-indigo-600" />
-              <Label className="text-lg font-semibold">Attachments</Label>
-              <Badge variant="secondary" className="text-xs">Optional</Badge>
-              {formData.attachedImages.length > 0 && (
-                <Badge variant="outline" className="ml-2">
-                  {formData.attachedImages.length} files
-                </Badge>
-              )}
-            </div>
-            <ImageUpload
-              images={formData.attachedImages}
-              onImagesChange={handleImagesChange}
-              onUpload={uploadImages}
-            />
-            <p className="text-sm text-gray-600 mt-2">
-              Upload screenshots, mockups, or reference materials
-            </p>
-          </CardContent>
-        </Card>
-
         {/* Submit Button */}
         <div className="flex items-center justify-between pt-6 border-t">
           <div className="text-sm text-gray-500">
-            {editTask ? 'Update existing test task' : 'Create new test task'}
+            {editTask ? 'Update existing unit test case' : 'Create new unit test case'}
           </div>
           <Button
             type="submit"
@@ -344,9 +284,9 @@ export default function TaskForm({ editTask, onSuccess }: TaskFormProps) {
                 Saving...
               </>
             ) : editTask ? (
-              'Update Test Task'
+              'Update Unit Test Case'
             ) : (
-              'Create Test Task'
+              'Create Unit Test Case'
             )}
           </Button>
         </div>

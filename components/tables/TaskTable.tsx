@@ -25,7 +25,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Edit, Trash2, Image as ImageIcon, Search, Filter, Calendar, FileText } from 'lucide-react';
+import { Edit, Trash2, Search, Filter, Calendar, FlaskConical } from 'lucide-react';
 import { Task } from '@/types/task';
 
 interface TaskTableProps {
@@ -46,8 +46,7 @@ export default function TaskTable({ onEditTask }: TaskTableProps) {
     if (searchTerm) {
       const filtered = tasks.filter(task =>
         task.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        task.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase())) ||
-        task.notes?.toLowerCase().includes(searchTerm.toLowerCase())
+        task.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
       );
       setFilteredTasks(filtered);
     } else {
@@ -62,7 +61,7 @@ export default function TaskTable({ onEditTask }: TaskTableProps) {
       setDeleteLoading(id);
       await deleteTask(id);
     } catch (error) {
-      console.error('Error deleting task:', error);
+      console.error('Error deleting unit test case:', error);
     } finally {
       setDeleteLoading(null);
     }
@@ -87,14 +86,14 @@ export default function TaskTable({ onEditTask }: TaskTableProps) {
       <Card className="glass-effect">
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
-            <FileText className="h-6 w-6 text-blue-600" />
-            <span>Test Tasks</span>
+            <FlaskConical className="h-6 w-6 text-blue-600" />
+            <span>Unit Test Cases</span>
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col items-center justify-center py-16">
             <div className="spinner w-8 h-8 mb-4" />
-            <h3 className="text-lg font-semibold text-gray-700 mb-2">Loading Test Tasks</h3>
+            <h3 className="text-lg font-semibold text-gray-700 mb-2">Loading Unit Test Cases</h3>
             <p className="text-gray-500">Please wait while we fetch your data...</p>
           </div>
         </CardContent>
@@ -107,14 +106,14 @@ export default function TaskTable({ onEditTask }: TaskTableProps) {
       <Card className="glass-effect">
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
-            <FileText className="h-6 w-6 text-red-600" />
-            <span>Test Tasks</span>
+            <FlaskConical className="h-6 w-6 text-red-600" />
+            <span>Unit Test Cases</span>
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col items-center justify-center py-16">
             <div className="bg-red-50 border border-red-200 rounded-xl p-8 max-w-md text-center">
-              <FileText className="h-12 w-12 text-red-600 mx-auto mb-4" />
+              <FlaskConical className="h-12 w-12 text-red-600 mx-auto mb-4" />
               <h3 className="text-red-800 font-semibold mb-2 text-lg">Error Loading Data</h3>
               <p className="text-red-600 text-sm mb-6">{error}</p>
               <Button 
@@ -136,21 +135,21 @@ export default function TaskTable({ onEditTask }: TaskTableProps) {
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center space-x-2">
-            <FileText className="h-6 w-6 text-blue-600" />
-            <span>Test Tasks Management</span>
+            <FlaskConical className="h-6 w-6 text-blue-600" />
+            <span>Unit Test Cases Management</span>
           </CardTitle>
           <div className="flex items-center space-x-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input
-                placeholder="Search tasks..."
+                placeholder="Search unit tests..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10 w-64"
               />
             </div>
             <Badge variant="outline" className="text-sm">
-              {filteredTasks.length} tasks
+              {filteredTasks.length} unit tests
             </Badge>
           </div>
         </div>
@@ -159,14 +158,14 @@ export default function TaskTable({ onEditTask }: TaskTableProps) {
         {filteredTasks.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16">
             <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-12 max-w-lg text-center">
-              <FileText className="h-16 w-16 text-blue-400 mx-auto mb-6" />
+              <FlaskConical className="h-16 w-16 text-blue-400 mx-auto mb-6" />
               <h3 className="text-blue-800 font-bold text-xl mb-3">
-                {searchTerm ? 'No Matching Tasks' : 'No Test Tasks Found'}
+                {searchTerm ? 'No Matching Unit Tests' : 'No Unit Test Cases Found'}
               </h3>
               <p className="text-blue-600 mb-6 leading-relaxed">
                 {searchTerm 
-                  ? 'No tasks match your search criteria. Try adjusting your search terms.'
-                  : 'Create your first test task to get started with quality assurance testing!'
+                  ? 'No unit tests match your search criteria. Try adjusting your search terms.'
+                  : 'Create your first unit test case to get started with quality assurance testing!'
                 }
               </p>
               {searchTerm && (
@@ -186,10 +185,9 @@ export default function TaskTable({ onEditTask }: TaskTableProps) {
               <TableHeader>
                 <TableRow className="bg-gradient-to-r from-gray-50 to-blue-50 border-b-2 border-gray-200">
                   <TableHead className="font-bold text-gray-800 py-4 w-20">ID</TableHead>
-                  <TableHead className="font-bold text-gray-800">Task Description</TableHead>
+                  <TableHead className="font-bold text-gray-800">Unit Test Description</TableHead>
                   <TableHead className="font-bold text-gray-800">Categories</TableHead>
                   <TableHead className="font-bold text-gray-800 text-center">Test Cases</TableHead>
-                  <TableHead className="font-bold text-gray-800 text-center">Attachments</TableHead>
                   <TableHead className="font-bold text-gray-800">
                     <div className="flex items-center space-x-2">
                       <Calendar className="h-4 w-4" />
@@ -210,9 +208,6 @@ export default function TaskTable({ onEditTask }: TaskTableProps) {
                     <TableCell>
                       <div className="max-w-md">
                         <p className="font-medium text-gray-900 mb-1">{getTaskSummary(task.description)}</p>
-                        {task.notes && (
-                          <p className="text-sm text-gray-500 line-clamp-2">{task.notes}</p>
-                        )}
                       </div>
                     </TableCell>
                     <TableCell>
@@ -247,20 +242,6 @@ export default function TaskTable({ onEditTask }: TaskTableProps) {
                         {task.testCases.length}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-center">
-                      {task.attachedImages && task.attachedImages.length > 0 ? (
-                        <div className="flex items-center justify-center">
-                          <div className="bg-blue-100 p-1 rounded">
-                            <ImageIcon className="h-3 w-3 text-blue-600" />
-                          </div>
-                          <span className="ml-1 text-xs text-blue-600 font-medium">
-                            {task.attachedImages.length}
-                          </span>
-                        </div>
-                      ) : (
-                        <span className="text-xs text-gray-400">—</span>
-                      )}
-                    </TableCell>
                     <TableCell className="text-sm text-gray-500">
                       {task.createdAt && formatDate(task.createdAt.toString())}
                     </TableCell>
@@ -288,9 +269,9 @@ export default function TaskTable({ onEditTask }: TaskTableProps) {
                           </AlertDialogTrigger>
                           <AlertDialogContent>
                             <AlertDialogHeader>
-                              <AlertDialogTitle>Delete Test Task</AlertDialogTitle>
+                              <AlertDialogTitle>Delete Unit Test Case</AlertDialogTitle>
                               <AlertDialogDescription>
-                                Are you sure you want to delete this test task? This action cannot be undone and will remove all associated data.
+                                Are you sure you want to delete this unit test case? This action cannot be undone and will remove all associated data.
                               </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
@@ -299,7 +280,7 @@ export default function TaskTable({ onEditTask }: TaskTableProps) {
                                 onClick={() => task._id && handleDelete(task._id)}
                                 className="bg-red-600 hover:bg-red-700"
                               >
-                                {deleteLoading === task._id ? 'Deleting...' : 'Delete Task'}
+                                {deleteLoading === task._id ? 'Deleting...' : 'Delete Unit Test'}
                               </AlertDialogAction>
                             </AlertDialogFooter>
                           </AlertDialogContent>

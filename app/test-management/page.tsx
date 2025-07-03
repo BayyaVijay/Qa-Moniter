@@ -12,7 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { FileText, Plus, List } from 'lucide-react';
+import { FlaskConical, Plus, List } from 'lucide-react';
 
 export default function TestManagementPage() {
   const [editingTask, setEditingTask] = useState<Task | null>(null);
@@ -41,11 +41,11 @@ export default function TestManagementPage() {
         <TabsList className="grid w-full grid-cols-2 bg-gray-100/50">
           <TabsTrigger value="create" className="flex items-center space-x-2">
             <Plus className="h-4 w-4" />
-            <span>Create Tests</span>
+            <span>Create Unit Tests</span>
           </TabsTrigger>
           <TabsTrigger value="manage" className="flex items-center space-x-2">
             <List className="h-4 w-4" />
-            <span>Manage Tests</span>
+            <span>Manage Unit Tests</span>
           </TabsTrigger>
         </TabsList>
 
@@ -53,8 +53,8 @@ export default function TestManagementPage() {
           <Card className="glass-effect">
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
-                <FileText className="h-6 w-6 text-blue-600" />
-                <span>Create New Test Task</span>
+                <FlaskConical className="h-6 w-6 text-blue-600" />
+                <span>Create New Unit Test Case</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -72,8 +72,8 @@ export default function TestManagementPage() {
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center space-x-2">
-              <FileText className="h-5 w-5 text-blue-600" />
-              <span>Edit Test Task</span>
+              <FlaskConical className="h-5 w-5 text-blue-600" />
+              <span>Edit Unit Test Case</span>
             </DialogTitle>
           </DialogHeader>
           <TaskForm 

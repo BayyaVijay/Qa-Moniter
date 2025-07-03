@@ -40,6 +40,8 @@ import {
   Brain,
   Menu,
   X,
+  FlaskConical,
+  Play,
 } from 'lucide-react';
 
 const navigation = [
@@ -51,16 +53,16 @@ const navigation = [
     gradient: 'from-blue-500 to-purple-600',
   },
   {
-    name: 'Test Laboratory',
+    name: 'UT Executions',
     href: '/test-execution',
-    icon: TestTube2,
+    icon: Play,
     description: 'Execute & Monitor',
     gradient: 'from-green-500 to-teal-600',
   },
   {
-    name: 'Test Arsenal',
+    name: 'Unit Test Cases',
     href: '/test-management',
-    icon: FileText,
+    icon: FlaskConical,
     description: 'Create & Manage',
     gradient: 'from-orange-500 to-red-600',
   },
@@ -139,11 +141,11 @@ export default function ModernSidebar() {
           {!isCollapsed && (
             <div className="flex items-center space-x-3">
               <div className="bg-gradient-to-r from-purple-500 to-blue-600 p-3 rounded-2xl neon-glow">
-                <Sparkles className="h-6 w-6 text-white" />
+                <FlaskConical className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-white">TestForge Pro</h1>
-                <p className="text-xs text-slate-400">Next-Gen QA Platform</p>
+                <h1 className="text-xl font-bold text-white">UnitTest Pro</h1>
+                <p className="text-xs text-slate-400">Next-Gen UT Platform</p>
               </div>
             </div>
           )}

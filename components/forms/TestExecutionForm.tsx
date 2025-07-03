@@ -13,7 +13,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { TestExecution, TestCase } from '@/types/testExecution';
 import { Task } from '@/types/task';
-import ImageUpload from '@/components/ImageUpload';
 import { 
   Clock, 
   CheckCircle, 
@@ -22,10 +21,8 @@ import {
   Hash, 
   User, 
   FileText, 
-  TestTube2,
-  Target,
-  Upload,
   Play,
+  Target,
   Pause,
   RotateCcw
 } from 'lucide-react';
@@ -36,7 +33,7 @@ interface TestExecutionFormProps {
 }
 
 export default function TestExecutionForm({ editTestExecution, onSuccess }: TestExecutionFormProps) {
-  const { createTestExecution, updateTestExecution, loading, uploadImages } = useTestExecution();
+  const { createTestExecution, updateTestExecution, loading } = useTestExecution();
   const { tasks, getTasks } = useTask();
   
   const [formData, setFormData] = useState({
@@ -45,7 +42,6 @@ export default function TestExecutionForm({ editTestExecution, onSuccess }: Test
     testCases: [] as TestCase[],
     status: 'pending' as 'pending' | 'in-progress' | 'completed' | 'failed',
     feedback: '',
-    attachedImages: [] as string[],
     testerName: '',
   });
 
@@ -69,7 +65,7 @@ export default function TestExecutionForm({ editTestExecution, onSuccess }: Test
   }, [isTimerRunning]);
 
   const generateTestId = () => {
-    const prefix = 'TEST';
+    const prefix = 'UT';
     const timestamp = Date.now().toString().slice(-6);
     const random = Math.random().toString(36).substring(2, 5).toUpperCase();
     return `${prefix}-${timestamp}-${random}`;
@@ -83,7 +79,6 @@ export default function TestExecutionForm({ editTestExecution, onSuccess }: Test
         testCases: editTestExecution.testCases,
         status: editTestExecution.status,
         feedback: editTestExecution.feedback,
-        attachedImages: editTestExecution.attachedImages || [],
         testerName: editTestExecution.testerName,
       });
       
@@ -145,18 +140,11 @@ export default function TestExecutionForm({ editTestExecution, onSuccess }: Test
     }));
   };
 
-  const handleImagesChange = (images: string[]) => {
-    setFormData(prev => ({
-      ...prev,
-      attachedImages: images,
-    }));
-  };
-
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
 
     if (!formData.taskId) {
-      newErrors.taskId = 'Task selection is required';
+      newErrors.taskId = 'Unit test case selection is required';
     }
 
     if (!formData.testId.trim()) {
@@ -203,7 +191,6 @@ export default function TestExecutionForm({ editTestExecution, onSuccess }: Test
           testCases: [],
           status: 'pending',
           feedback: '',
-          attachedImages: [],
           testerName: '',
         });
         setSelectedTask(null);
@@ -213,7 +200,7 @@ export default function TestExecutionForm({ editTestExecution, onSuccess }: Test
 
       onSuccess?.();
     } catch (error) {
-      console.error('Error saving test execution:', error);
+      console.error('Error saving UT execution:', error);
     }
   };
 
@@ -227,19 +214,6 @@ export default function TestExecutionForm({ editTestExecution, onSuccess }: Test
         return <Clock className="h-4 w-4 text-blue-600" />;
       default:
         return <AlertCircle className="h-4 w-4 text-gray-600" />;
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'completed':
-        return 'status-completed';
-      case 'in-progress':
-        return 'status-in-progress';
-      case 'failed':
-        return 'status-failed';
-      default:
-        return 'status-pending';
     }
   };
 
@@ -268,20 +242,20 @@ export default function TestExecutionForm({ editTestExecution, onSuccess }: Test
   return (
     <div className="space-y-8">
       <form onSubmit={handleSubmit} className="space-y-8">
-        {/* Test Execution Header */}
+        {/* UT Execution Header */}
         <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-l-4 border-l-blue-500">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
                 <div className="bg-blue-100 p-3 rounded-xl">
-                  <TestTube2 className="h-6 w-6 text-blue-600" />
+                  <Play className="h-6 w-6 text-blue-600" />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900">
-                    {editTestExecution ? 'Edit Test Execution' : 'New Test Execution'}
+                    {editTestExecution ? 'Edit UT Execution' : 'New UT Execution'}
                   </h3>
                   <p className="text-sm text-gray-600">
-                    Execute and document test results with detailed feedback
+                    Execute and document unit test results with detailed feedback
                   </p>
                 </div>
               </div>
@@ -321,7 +295,7 @@ export default function TestExecutionForm({ editTestExecution, onSuccess }: Test
             <CardContent className="p-6">
               <div className="flex items-center space-x-2 mb-4">
                 <Target className="h-5 w-5 text-green-600" />
-                <Label className="text-lg font-semibold">Select Test Task</Label>
+                <Label className="text-lg font-semibold">Select Unit Test Case</Label>
               </div>
               <Select
                 value={formData.taskId}
@@ -329,7 +303,7 @@ export default function TestExecutionForm({ editTestExecution, onSuccess }: Test
                 disabled={!!editTestExecution}
               >
                 <SelectTrigger className={`h-12 ${errors.taskId ? 'border-red-500' : ''}`}>
-                  <SelectValue placeholder="Choose a task to test" />
+                  <SelectValue placeholder="Choose a unit test case to execute" />
                 </SelectTrigger>
                 <SelectContent>
                   {tasks.map((task) => (
@@ -365,13 +339,13 @@ export default function TestExecutionForm({ editTestExecution, onSuccess }: Test
             <CardContent className="p-6">
               <div className="flex items-center space-x-2 mb-4">
                 <Hash className="h-5 w-5 text-purple-600" />
-                <Label className="text-lg font-semibold">Test Execution ID</Label>
+                <Label className="text-lg font-semibold">UT Execution ID</Label>
               </div>
               <Input
                 name="testId"
                 value={formData.testId}
                 onChange={handleInputChange}
-                placeholder="Auto-generated test ID"
+                placeholder="Auto-generated execution ID"
                 className={`h-12 font-mono ${errors.testId ? 'border-red-500' : ''}`}
                 readOnly
               />
@@ -514,13 +488,13 @@ export default function TestExecutionForm({ editTestExecution, onSuccess }: Test
           <CardContent className="p-6">
             <div className="flex items-center space-x-2 mb-4">
               <FileText className="h-5 w-5 text-yellow-600" />
-              <Label className="text-lg font-semibold">Test Execution Feedback</Label>
+              <Label className="text-lg font-semibold">UT Execution Feedback</Label>
             </div>
             <Textarea
               name="feedback"
               value={formData.feedback}
               onChange={handleInputChange}
-              placeholder="Provide detailed feedback about the test execution, including any issues found, observations, or recommendations..."
+              placeholder="Provide detailed feedback about the unit test execution, including any issues found, observations, or recommendations..."
               rows={6}
               className={`${errors.feedback ? 'border-red-500' : ''} resize-none`}
             />
@@ -533,34 +507,10 @@ export default function TestExecutionForm({ editTestExecution, onSuccess }: Test
           </CardContent>
         </Card>
 
-        {/* Attachments */}
-        <Card className="border-l-4 border-l-pink-500">
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-2 mb-4">
-              <Upload className="h-5 w-5 text-pink-600" />
-              <Label className="text-lg font-semibold">Evidence & Screenshots</Label>
-              <Badge variant="secondary" className="text-xs">Optional</Badge>
-              {formData.attachedImages.length > 0 && (
-                <Badge variant="outline" className="ml-2">
-                  {formData.attachedImages.length} files
-                </Badge>
-              )}
-            </div>
-            <ImageUpload
-              images={formData.attachedImages}
-              onImagesChange={handleImagesChange}
-              onUpload={uploadImages}
-            />
-            <p className="text-sm text-gray-600 mt-2">
-              Upload screenshots, error logs, or other evidence from test execution
-            </p>
-          </CardContent>
-        </Card>
-
         {/* Submit Button */}
         <div className="flex items-center justify-between pt-6 border-t">
           <div className="text-sm text-gray-500">
-            {editTestExecution ? 'Update existing test execution' : 'Create new test execution'}
+            {editTestExecution ? 'Update existing UT execution' : 'Create new UT execution'}
           </div>
           <Button
             type="submit"
@@ -573,9 +523,9 @@ export default function TestExecutionForm({ editTestExecution, onSuccess }: Test
                 Saving...
               </>
             ) : editTestExecution ? (
-              'Update Test Execution'
+              'Update UT Execution'
             ) : (
-              'Save Test Execution'
+              'Save UT Execution'
             )}
           </Button>
         </div>
